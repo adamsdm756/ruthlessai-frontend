@@ -2,9 +2,8 @@
 // ✅ FINAL WORKING VERSION for RunPod + Render + Ollama backend
 // Includes auto-ping, no proxy, correct /api/generate route
 
-const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL ||
-  "https://wlyxeu7erob0udp-33529.proxy.runpod.net"; // your RunPod proxy
+const BACKEND_URL = "https://corsproxy.io/?https://wlyxeu7erob0udp-33529.proxy.runpod.net";
+ // your RunPod proxy
 
 const PING_INTERVAL_MS = 1000 * 60 * 2; // every 2 minutes
 
