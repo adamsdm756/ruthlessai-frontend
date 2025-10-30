@@ -4,8 +4,9 @@
    Optionally use a public CORS proxy (temporary only).
 */
 
-const BACKEND_URL = process.env.VITE_BACKEND_URL || "https://wlxeu7erob0udp-33529.proxy.runpod.net";
-const USE_PROXY = process.env.VITE_USE_PROXY === "true" || true; // flip to false if backend has CORS configured
+// Safe for Vite/Render build
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://wlxeu7erob0udp-33529.proxy.runpod.net";
+const USE_PROXY = import.meta.env.VITE_USE_PROXY === "true" || true;
 const PROXY_BASE = "https://corsproxy.io/?"; // temporary CORS proxy (use only until you enable CORS on backend)
 const PING_INTERVAL_MS = 1000 * 60 * 2; // 2 minutes - adjust if you like
 
