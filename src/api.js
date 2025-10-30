@@ -14,7 +14,8 @@ function buildUrl(path = "/") {
   const target = `${BACKEND_URL.replace(/\/$/, "")}${path}`;
   if (USE_PROXY) {
     // corsproxy.io expects the target URL encoded after `?`
-    return `${PROXY_BASE}${encodeURIComponent(target)}`;
+    return `${PROXY_BASE}${target}`;
+
   }
   return target;
 }
