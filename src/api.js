@@ -2,7 +2,7 @@
 // Connects frontend → RunPod backend + keep-alive ping
 
 // 🔧 Hardcoded backend URL (temporary)
-const OLLAMA_URL = "https://wlxeu7erob0udp-11434.proxy.runpod.net";
+const OLLAMA_URL = "https://wlxeu7erob0udp-33529.proxy.runpod.net";
 
 // 🌐 CORS-safe proxy (for testing only)
 const PROXY = "https://api.allorigins.win/raw?url=";
