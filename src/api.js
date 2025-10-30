@@ -55,7 +55,7 @@ async function postJson(url, body, extraHeaders = {}) {
  * opts: { model?: string, streaming?: boolean }  // streaming not implemented here
  */
 export async function sendMessage(message, opts = {}) {
-  const url = buildUrl("/api/chat");
+  const url = buildUrl("/chat");
   const body = {
     model: opts.model || "mistral",
     messages: [{ role: "user", content: message }],
