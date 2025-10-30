@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { sendToRuthless } from "./api";
 import logo from "./ruthless-logo.png";
 
@@ -9,14 +9,6 @@ export default function App() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🟢 KEEP-ALIVE: Pings backend every 5 minutes so pod never sleeps
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetch("https://wlxeu7erob0udp-11434.proxy.runpod.net").catch(() => {});
-    }, 300000); // 5 min
-    return () => clearInterval(interval);
-  }, []);
-
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -26,8 +18,8 @@ export default function App() {
     setInput("");
     setLoading(true);
 
-    const aiReply = await sendToRuthless([...messages, userMessage]);
-    setMessages((prev) => [...prev, { role: "ai", content: aiReply }]);
+   const aiReply = await sendToRuthless([...messages, userMessage]);
+setMessages((prev) => [...prev, { role: "ai", content: aiReply }]);
 
     setLoading(false);
   };
