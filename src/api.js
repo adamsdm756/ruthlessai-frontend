@@ -1,23 +1,18 @@
 /* ==========================================================
-   RuthlessAI API Client
-   Works with Ollama backend (RunPod) and CORS-enabled setup
+   RuthlessAI Frontend → RunPod Ollama Backend API Client
    ========================================================== */
 
-const BACKEND_URL = "https://wlyxeu7erob0udp-33529.proxy.runpod.net"; // ✅ Your live RunPod endpoint
-const USE_PROXY = false; // ❌ No proxy needed — you have CORS enabled
-const PROXY_BASE = "https://corsproxy.io/?"; // fallback (optional)
-const PING_INTERVAL_MS = 1000 * 60 * 2; // ping every 2 minutes
+const BACKEND_URL = "https://wlxeu7erob0udp-11434.proxy.runpod.net"; // ✅ your RunPod Ollama endpoint
+const USE_PROXY = false; // ❌ not needed — CORS is enabled on backend
+const PROXY_BASE = "https://corsproxy.io/?"; // optional fallback
+const PING_INTERVAL_MS = 1000 * 60 * 2; // ping every 2 minutes to keep pod awake
 
 let _pingIntervalId = null;
 
-/* 🧩 Build URL with or without proxy */
+/* 🧩 Build URL (optionally with proxy) */
 function buildUrl(path = "/") {
-  const cleanTarget = `${BACKEND_URL}${path}`;
-  if (USE_PROXY) {
-    // only used if backend CORS disabled
-    return `${PROXY_BASE}${encodeURIComponent(cleanTarget)}`;
-  }
-  return cleanTarget;
+  const target = `${BACKEND_URL}${path}`;
+  return USE_PROXY ? `${PROXY_BASE}${encodeURIComponent(target)}` : target;
 }
 
 /* 🚀 Generic POST helper */
@@ -29,26 +24,25 @@ async function postJson(path, body) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
   } catch (err) {
-    console.error("❌ sendMessage error:", err);
+    console.error("❌ postJson error:", err);
     throw err;
   }
 }
 
-/* 💬 Send a message to the model */
+/* 💬 Send prompt to the model */
 export async function sendMessage(prompt) {
   const payload = {
-    model: "mistral", // change to your model name if needed
-    prompt: prompt,
-    stream: false,
+    model: "ruthless:latest", // ✅ your custom model
+    prompt,
+    stream: false, // no streaming for now
   };
   return await postJson("/api/generate", payload);
 }
 
-/* 🩺 Backend health check (ping) */
+/* 🩺 Health check (ping backend) */
 export async function pingBackend() {
   try {
     const res = await fetch(buildUrl("/api/tags"));
@@ -61,7 +55,7 @@ export async function pingBackend() {
   }
 }
 
-/* ♻️ Auto ping to keep backend awake */
+/* ♻️ Auto-ping to keep backend awake */
 export function startAutoPing(intervalMs = PING_INTERVAL_MS) {
   if (_pingIntervalId) return;
   _pingIntervalId = setInterval(() => {
@@ -72,6 +66,7 @@ export function startAutoPing(intervalMs = PING_INTERVAL_MS) {
   console.info("Auto-ping started — every", intervalMs / 1000, "sec");
 }
 
+/* 🧹 Stop auto-ping */
 export function stopAutoPing() {
   if (_pingIntervalId) {
     clearInterval(_pingIntervalId);
@@ -80,7 +75,7 @@ export function stopAutoPing() {
   }
 }
 
-/* 🔧 Manual ping test */
+/* 🧪 Manual ping for debugging */
 export function testBackendOnce() {
   return pingBackend().then((r) => {
     if (r.ok) console.info("Backend ping ok:", r.result);
@@ -89,5 +84,5 @@ export function testBackendOnce() {
   });
 }
 
-/* ✅ Compatibility alias */
+/* ✅ Alias for older imports */
 export const sendToRuthless = sendMessage;
