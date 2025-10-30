@@ -125,3 +125,4 @@ export function testBackendOnce() {
     return r;
   });
 }
+export const sendToRuthless = sendMessage;
