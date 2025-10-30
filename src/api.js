@@ -1,26 +1,18 @@
-/* src/api.js
-   Full client-side API module with keep-alive ping.
-   Replace BACKEND_URL with your RunPod/ollama proxy URL or real backend.
-   Optionally use a public CORS proxy (temporary only).
-*/
+// src/api.js
+// ✅ FINAL WORKING VERSION for RunPod + Render + Ollama backend
+// Includes auto-ping, no proxy, correct /api/generate route
 
-// Safe for Vite/Render build
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://wlxeu7erob0udp-33529.proxy.runpod.net";
-const USE_PROXY = import.meta.env.VITE_USE_PROXY === "true" || true;
-const PROXY_BASE = "https://corsproxy.io/?"; // temporary CORS proxy (use only until you enable CORS on backend)
-const PING_INTERVAL_MS = 1000 * 60 * 2; // 2 minutes - adjust if you like
+const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL ||
+  "https://wlyxeu7erob0udp-33529.proxy.runpod.net"; // your RunPod proxy
+
+const PING_INTERVAL_MS = 1000 * 60 * 2; // every 2 minutes
 
 function buildUrl(path = "/") {
-  const target = `${BACKEND_URL.replace(/\/$/, "")}${path}`;
-  if (USE_PROXY) {
-    // corsproxy.io expects the target URL encoded after `?`
-    return `${PROXY_BASE}${target}`;
-
-  }
-  return target;
+  return `${BACKEND_URL}${path}`;
 }
 
-/** Generic POST helper */
+// --- POST helper ---
 async function postJson(url, body, extraHeaders = {}) {
   const res = await fetch(url, {
     method: "POST",
@@ -30,81 +22,49 @@ async function postJson(url, body, extraHeaders = {}) {
     },
     body: JSON.stringify(body),
   });
-
-  if (!res.ok) {
-    // try to get text for debugging
-    let text = "";
-    try { text = await res.text(); } catch (e) {}
-    const err = new Error(`HTTP ${res.status}: ${res.statusText} - ${text}`);
-    err.status = res.status;
-    err.body = text;
-    throw err;
-  }
-
-  const contentType = res.headers.get("Content-Type") || "";
-  if (contentType.includes("application/json")) {
-    return res.json();
-  }
-  // fallback - return text
-  return res.text();
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
 }
 
-/**
- * Send a chat message to the backend
- * message: string
- * opts: { model?: string, streaming?: boolean }  // streaming not implemented here
- */
-export async function sendMessage(message, opts = {}) {
-  const url = buildUrl("/chat");
-  const body = {
-    model: opts.model || "mistral",
-    messages: [{ role: "user", content: message }],
+// --- Send chat messages ---
+export async function sendMessage(message) {
+  const url = buildUrl("/api/generate"); // ✅ Correct endpoint
+  const payload = {
+    model: "mistral",
+    prompt: message, // generate expects "prompt" not "messages"
   };
-
   try {
-    const data = await postJson(url, body);
-    return data;
+    const result = await postJson(url, payload);
+    return result;
   } catch (err) {
     console.error("sendMessage error:", err);
     throw err;
   }
 }
 
-/**
- * Lightweight ping endpoint call - used to keep RunPod / container alive
- * Returns true if backend responded OK, false otherwise (doesn't throw).
- */
+// --- Ping backend to keep alive ---
 export async function pingBackend() {
-  const url = buildUrl("/api/ping");
+  const url = buildUrl("/api/tags");
   try {
-    // some backends expect GET here - cors proxies may require GET or POST.
-    // use POST with tiny JSON for consistency.
-    const result = await postJson(url, { ping: true });
-    return { ok: true, result };
-  } catch (err) {
-    console.warn("pingBackend failed:", err);
-    return { ok: false, error: err };
+    const res = await fetch(url);
+    if (res.ok) {
+      console.info("✅ Backend alive");
+      return true;
+    } else {
+      console.warn("⚠️ Backend returned:", res.status);
+      return false;
+    }
+  } catch (e) {
+    console.warn("⚠️ Ping failed:", e.message);
+    return false;
   }
 }
 
-/* Auto-ping control (so you can start/stop from React lifecycle) */
 let _pingIntervalId = null;
-
 export function startAutoPing(intervalMs = PING_INTERVAL_MS) {
-  if (_pingIntervalId) return; // already running
-  // do an immediate ping first
-  pingBackend().then(r => {
-    if (!r.ok) console.info("initial ping failed (still starting backend?)", r.error);
-  });
-  _pingIntervalId = setInterval(async () => {
-    const r = await pingBackend();
-    if (!r.ok) {
-      console.debug("auto-ping failed:", r.error && r.error.message);
-    } else {
-      console.debug("auto-ping ok");
-    }
-  }, intervalMs);
-  console.info("Auto-ping started, interval:", intervalMs);
+  if (_pingIntervalId) return;
+  _pingIntervalId = setInterval(pingBackend, intervalMs);
+  console.info("Auto-ping started");
 }
 
 export function stopAutoPing() {
@@ -115,15 +75,4 @@ export function stopAutoPing() {
   }
 }
 
-/* Helpful function for debugging */
-export function testBackendOnce() {
-  return pingBackend().then(r => {
-    if (r.ok) {
-      console.info("Backend ping ok:", r.result);
-    } else {
-      console.warn("Backend ping failed:", r.error);
-    }
-    return r;
-  });
-}
 export const sendToRuthless = sendMessage;
