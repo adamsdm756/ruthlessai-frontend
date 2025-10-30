@@ -1,12 +1,18 @@
-// ✅ RuthlessAI API client
-// Connects frontend to the RunPod backend + keep-alive ping
+// ✅ RuthlessAI API client (CORS-safe version)
+// Connects frontend → RunPod backend + keep-alive ping
 
-const OLLAMA_URL = import.meta.env.VITE_API_URL || "https://wlxeu7erob0udp-11434.proxy.runpod.net";
+// 🔧 Hardcoded backend URL (temporary)
+const OLLAMA_URL = "https://wlxeu7erob0udp-11434.proxy.runpod.net";
 
-// 🧩 Send chat message to backend
+// 🌐 CORS-safe proxy (for testing only)
+const PROXY = "https://api.allorigins.win/raw?url=";
+
+// 🧠 Send message to backend
 export async function sendToRuthless(message) {
   try {
-    const response = await fetch(`${OLLAMA_URL}/api/chat`, {
+    const url = `${PROXY}${encodeURIComponent(`${OLLAMA_URL}/api/chat`)}`;
+
+    const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message }),
@@ -20,17 +26,18 @@ export async function sendToRuthless(message) {
     return data.reply || "⚠️ No response from RuthlessAI.";
   } catch (error) {
     console.error("❌ API error:", error);
-    return "⚠️ Failed to reach RuthlessAI backend.";
+    return "⚠️ Failed to reach RuthlessAI backend (CORS issue).";
   }
 }
 
-// 🔄 Keep-alive ping to prevent pod sleep
+// 🔄 Keep backend awake
 export function startKeepAlive() {
   const PING_INTERVAL = 1000 * 60 * 2; // every 2 minutes
+  const pingUrl = `${PROXY}${encodeURIComponent(`${OLLAMA_URL}/api/health`)}`;
 
   setInterval(async () => {
     try {
-      const ping = await fetch(`${OLLAMA_URL}/api/health`, { method: "GET" });
+      const ping = await fetch(pingUrl, { method: "GET" });
       if (ping.ok) console.log("✅ Pinged backend to keep it awake");
       else console.warn("⚠️ Backend ping failed:", ping.status);
     } catch (err) {
