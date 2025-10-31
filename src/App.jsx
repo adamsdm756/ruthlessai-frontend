@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { sendToRuthless } from "./api";
 import logo from "./ruthless-logo.png";
 
@@ -9,6 +9,15 @@ export default function App() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ✅ Keep Render awake (no sleep)
+  useEffect(() => {
+    const ping = () =>
+      fetch(`${import.meta.env.VITE_API_URL}/api/ping`).catch(() => {});
+    ping();
+    const interval = setInterval(ping, 45000);
+    return () => clearInterval(interval);
+  }, []);
+
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -18,8 +27,8 @@ export default function App() {
     setInput("");
     setLoading(true);
 
-   const aiReply = await sendToRuthless([...messages, userMessage]);
-setMessages((prev) => [...prev, { role: "ai", content: aiReply }]);
+    const aiReply = await sendToRuthless([...messages, userMessage]);
+    setMessages((prev) => [...prev, { role: "ai", content: aiReply }]);
 
     setLoading(false);
   };
@@ -88,7 +97,6 @@ setMessages((prev) => [...prev, { role: "ai", content: aiReply }]);
           </button>
         </form>
       </div>
-
     </div>
   );
 }
