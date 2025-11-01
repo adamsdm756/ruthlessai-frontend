@@ -10,7 +10,7 @@ export default function App() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Conversation memory (this is the only real fix)
+  // ✅ Conversation Memory
   const [conversation, setConversation] = useState(
     "RuthlessAI: Ready. No filters. No feelings. Just raw answers.\n"
   );
@@ -33,18 +33,18 @@ export default function App() {
     setInput("");
     setLoading(true);
 
-    // ✅ Update conversation memory
+    // ✅ Append user input to memory
     const updatedConversation =
       conversation + `User: ${userMessage}\nRuthlessAI: `;
     setConversation(updatedConversation);
 
-    // ✅ Send full memory instead of message array
+    // ✅ Send WHOLE conversation to the model
     const aiReply = await sendToRuthless(updatedConversation);
 
-    // ✅ Show AI reply
+    // ✅ Show AI message in UI
     setMessages((prev) => [...prev, { role: "ai", content: aiReply }]);
 
-    // ✅ Append the reply to stored conversation
+    // ✅ Append AI reply to memory
     setConversation((prev) => prev + aiReply + "\n");
 
     setLoading(false);
@@ -52,10 +52,8 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-zinc-900 to-black text-white overflow-hidden">
-      {/* Background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-cyan-500/20 blur-[200px] rounded-full animate-pulse"></div>
 
-      {/* Logo Section */}
       <div className="flex justify-center items-center h-[40vh]">
         <img
           src={logo}
@@ -64,7 +62,6 @@ export default function App() {
         />
       </div>
 
-      {/* Chat container */}
       <div className="relative w-full max-w-md bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-6">
         <h1 className="text-2xl font-bold text-center mb-2 text-cyan-400 tracking-widest">
           RUT#L3SS_AI
@@ -73,7 +70,6 @@ export default function App() {
           Always in Ruthless Mode
         </p>
 
-        {/* Message box */}
         <div className="space-y-3 max-h-80 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-gray-600">
           {messages.map((msg, i) => (
             <div
@@ -93,7 +89,6 @@ export default function App() {
           )}
         </div>
 
-        {/* Input */}
         <form
           onSubmit={sendMessage}
           className="flex items-center border border-white/10 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-cyan-500/50 transition"
