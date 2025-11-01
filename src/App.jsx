@@ -6,10 +6,16 @@ export default function App() {
   const [messages, setMessages] = useState([
     { role: "ai", content: "Ready. No filters. No feelings. Just raw answers." },
   ]);
+
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Keep Render awake (no sleep)
+  // ✅ Conversation memory (this is the only real fix)
+  const [conversation, setConversation] = useState(
+    "RuthlessAI: Ready. No filters. No feelings. Just raw answers.\n"
+  );
+
+  // ✅ Keep backend awake
   useEffect(() => {
     const ping = () =>
       fetch(`${import.meta.env.VITE_API_URL}/api/ping`).catch(() => {});
@@ -22,13 +28,24 @@ export default function App() {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMessage = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMessage]);
+    const userMessage = input;
+    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setInput("");
     setLoading(true);
 
-    const aiReply = await sendToRuthless([...messages, userMessage]);
+    // ✅ Update conversation memory
+    const updatedConversation =
+      conversation + `User: ${userMessage}\nRuthlessAI: `;
+    setConversation(updatedConversation);
+
+    // ✅ Send full memory instead of message array
+    const aiReply = await sendToRuthless(updatedConversation);
+
+    // ✅ Show AI reply
     setMessages((prev) => [...prev, { role: "ai", content: aiReply }]);
+
+    // ✅ Append the reply to stored conversation
+    setConversation((prev) => prev + aiReply + "\n");
 
     setLoading(false);
   };
