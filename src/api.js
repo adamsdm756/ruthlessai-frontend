@@ -5,12 +5,12 @@ export async function sendToRuthless(messages) {
 
   const response = await fetch(`${PROXY_URL}/api/generate`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ prompt: userMessage })
   });
 
   const data = await response.json();
-  return data.reply;
+
+  // Ollama returns `data.response` not `data.reply`
+  return data.response || data.message || "No response from model.";
 }
