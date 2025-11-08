@@ -6,11 +6,14 @@ export async function sendToRuthless(messages) {
   const response = await fetch(`${PROXY_URL}/api/generate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt: userMessage })
+    body: JSON.stringify({ prompt: userMessage, model: "ruthless-mistral" }),
   });
 
   const data = await response.json();
 
-  // Ollama returns `data.response` not `data.reply`
-  return data.response || data.message || "No response from model.";
+  if (data.response) return data.response;
+  if (data.output?.length) return data.output.map((o) => o.content).join(" ");
+  if (data.message) return data.message;
+
+  return "⚠️ No valid response from model.";
 }

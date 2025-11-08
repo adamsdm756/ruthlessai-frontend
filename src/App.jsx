@@ -8,8 +8,9 @@ export default function App() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [started, setStarted] = useState(false); // ✅ new state for expansion
 
-  // ✅ Keep Render awake (no sleep)
+  // Keep Render awake
   useEffect(() => {
     const ping = () =>
       fetch(`${import.meta.env.VITE_API_URL}/api/ping`).catch(() => {});
@@ -21,6 +22,7 @@ export default function App() {
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
+    if (!started) setStarted(true); // ✅ trigger full page expansion
 
     const userMessage = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
@@ -34,21 +36,33 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-zinc-900 to-black text-white overflow-hidden">
+    <div
+      className={`relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-zinc-900 to-black text-white overflow-hidden transition-all duration-700 ${
+        started ? "pt-6" : ""
+      }`}
+    >
       {/* Background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-cyan-500/20 blur-[200px] rounded-full animate-pulse"></div>
 
-      {/* Logo Section */}
-      <div className="flex justify-center items-center h-[40vh]">
-        <img
-          src={logo}
-          alt="RuthlessAI Logo"
-          className="w-[280px] sm:w-[400px] md:w-[500px] drop-shadow-[0_0_40px_rgba(0,255,255,0.8)] animate-pulse-slow"
-        />
-      </div>
+      {/* Logo section - hidden after chat starts */}
+      {!started && (
+        <div className="flex justify-center items-center h-[40vh] transition-all duration-700">
+          <img
+            src={logo}
+            alt="RuthlessAI Logo"
+            className="w-[280px] sm:w-[400px] md:w-[500px] drop-shadow-[0_0_40px_rgba(0,255,255,0.8)] animate-pulse-slow"
+          />
+        </div>
+      )}
 
-      {/* Chat container */}
-      <div className="relative w-full max-w-md bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-6">
+      {/* Chat container expands to full page after first message */}
+      <div
+        className={`relative w-full transition-all duration-700 ${
+          started
+            ? "max-w-3xl h-[90vh] flex flex-col justify-between"
+            : "max-w-md"
+        } bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-6`}
+      >
         <h1 className="text-2xl font-bold text-center mb-2 text-cyan-400 tracking-widest">
           RUT#L3SS_AI
         </h1>
@@ -56,13 +70,15 @@ export default function App() {
           Always in Ruthless Mode
         </p>
 
-        {/* Message box */}
-        <div className="space-y-3 max-h-80 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-gray-600">
+        {/* Messages */}
+        <div className="flex-1 space-y-3 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-gray-600">
           {messages.map((msg, i) => (
             <div
               key={i}
               className={`${
-                msg.role === "ai" ? "text-cyan-300" : "text-red-400 text-right"
+                msg.role === "ai"
+                  ? "text-cyan-300 text-left"
+                  : "text-red-400 text-right"
               } text-sm font-mono`}
             >
               {msg.role === "ai" ? "RuthlessAI: " : "You: "}
