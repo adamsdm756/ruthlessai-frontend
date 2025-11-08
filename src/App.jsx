@@ -1,118 +1,76 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import "./App.css";
 import { sendToRuthless } from "./api";
-import logo from "./ruthless-logo.png";
 
-export default function App() {
-  const [messages, setMessages] = useState([
-    { role: "ai", content: "Ready. No filters. No feelings. Just raw answers." },
-  ]);
+function App() {
   const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [started, setStarted] = useState(false); // ✅ new state for expansion
 
-  // Keep Render awake
-  useEffect(() => {
-    const ping = () =>
-      fetch(`${import.meta.env.VITE_API_URL}/api/ping`).catch(() => {});
-    ping();
-    const interval = setInterval(ping, 45000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const sendMessage = async (e) => {
-    e.preventDefault();
+  const sendMessage = async () => {
     if (!input.trim()) return;
-    if (!started) setStarted(true); // ✅ trigger full page expansion
-
     const userMessage = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
-    setInput("");
     setLoading(true);
 
-    const aiReply = await sendToRuthless([...messages, userMessage]);
-    setMessages((prev) => [...prev, { role: "ai", content: aiReply }]);
+    try {
+      const aiReply = await sendToRuthless([...messages, userMessage]);
 
-    setLoading(false);
+      // add inline emoji randomly for a conversational feel
+      const emojis = ["😎", "🤖", "🔥", "💬", "🧠", "⚡", "👀", "✨", "😄", "📘"];
+      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+      const spacedText = aiReply.text
+        .replace(/\n{2,}/g, "<br><br>") // double line breaks = new paragraph
+        .replace(/\n/g, "<br>") // single newlines = line breaks
+        .replace(/([.!?])\s+/g, "$1&nbsp;&nbsp;") // extra space after punctuation
+        + ` ${randomEmoji}`;
+
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", content: spacedText }
+      ]);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setInput("");
+      setLoading(false);
+    }
   };
 
   return (
-    <div
-      className={`relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-zinc-900 to-black text-white overflow-hidden transition-all duration-700 ${
-        started ? "pt-6" : ""
-      }`}
-    >
-      {/* Background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-cyan-500/20 blur-[200px] rounded-full animate-pulse"></div>
+    <div className="chat-container">
+      <header className="header">
+        <h1>RUT#L3SS_AI ⚡</h1>
+        <p>Always in Ruthless Mode 🤖</p>
+      </header>
 
-      {/* Logo section - hidden after chat starts */}
-      {!started && (
-        <div className="flex justify-center items-center h-[40vh] transition-all duration-700">
-          <img
-            src={logo}
-            alt="RuthlessAI Logo"
-            className="w-[280px] sm:w-[400px] md:w-[500px] drop-shadow-[0_0_40px_rgba(0,255,255,0.8)] animate-pulse-slow"
-          />
-        </div>
-      )}
-
-      {/* Chat container expands to full page after first message */}
-      <div
-        className={`relative w-full transition-all duration-700 ${
-          started
-            ? "max-w-3xl h-[90vh] flex flex-col justify-between"
-            : "max-w-md"
-        } bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg p-6`}
-      >
-        <h1 className="text-2xl font-bold text-center mb-2 text-cyan-400 tracking-widest">
-          RUT#L3SS_AI
-        </h1>
-        <p className="text-sm text-center text-gray-400 mb-6">
-          Always in Ruthless Mode
-        </p>
-
-        {/* Messages */}
-        <div className="flex-1 space-y-3 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-gray-600">
-          {messages.map((msg, i) => (
+      <div className="messages">
+        {messages.map((msg, i) => (
+          <div key={i} className={`message ${msg.role}`}>
+            <strong>{msg.role === "ai" ? "RuthlessAI:" : "You:"}</strong>
             <div
-              key={i}
-              className={`${
-                msg.role === "ai"
-                  ? "text-cyan-300 text-left"
-                  : "text-red-400 text-right"
-              } text-sm font-mono`}
-            >
-              {msg.role === "ai" ? "RuthlessAI: " : "You: "}
-              <span className="text-gray-300">{msg.content}</span>
-            </div>
-          ))}
-          {loading && (
-            <div className="text-cyan-400 text-sm font-mono animate-pulse">
-              RuthlessAI is thinking...
-            </div>
-          )}
-        </div>
+              className="message-content"
+              dangerouslySetInnerHTML={{
+                __html: msg.content
+              }}
+            />
+          </div>
+        ))}
+      </div>
 
-        {/* Input */}
-        <form
-          onSubmit={sendMessage}
-          className="flex items-center border border-white/10 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-cyan-500/50 transition"
-        >
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask me anything..."
-            className="flex-1 bg-transparent text-white placeholder-gray-500 px-3 py-2 text-sm focus:outline-none"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 text-sm font-semibold bg-cyan-600 hover:bg-cyan-500 transition-all"
-          >
-            Send
-          </button>
-        </form>
+      <div className="input-container">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type something... 💭"
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+        />
+        <button onClick={sendMessage} disabled={loading}>
+          {loading ? "Thinking 🤔" : "Send 🚀"}
+        </button>
       </div>
     </div>
   );
 }
+
+export default App;
