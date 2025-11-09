@@ -43,6 +43,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
+  // Update intro message when mode changes
   useEffect(() => {
     setMessages([{ role: "ai", content: modeIntros[mode] }]);
   }, [mode]);
@@ -102,11 +103,8 @@ export default function App() {
           started
             ? "max-w-3xl h-[90vh] flex flex-col justify-between"
             : "max-w-md"
-        } bg-white/5 backdrop-blur-md border border-transparent 
-        rounded-2xl shadow-[0_0_30px_rgba(0,255,255,0.1)] p-6 
-        before:content-[''] before:absolute before:inset-0 before:rounded-2xl 
-        before:p-[1px] before:bg-gradient-to-r before:from-cyan-400/40 
-        before:to-cyan-600/40 before:-z-10 animate-ambientPulse`}
+        } bg-white/5 backdrop-blur-md border border-white/10 
+        rounded-2xl shadow-[0_0_30px_rgba(0,255,255,0.1)] p-6`}
       >
         {/* Header and dropdown */}
         <div className="flex flex-col items-center justify-center mb-4">
@@ -121,8 +119,7 @@ export default function App() {
                 onChange={(e) => setMode(e.target.value)}
                 className="bg-transparent text-cyan-400 border border-cyan-500/30 rounded-lg 
                 px-2 py-1 text-sm focus:outline-none appearance-none pr-6 
-                hover:border-cyan-400/80 hover:shadow-[0_0_12px_rgba(0,255,255,0.3)] 
-                transition-all duration-300"
+                hover:border-cyan-400 hover:shadow-[0_0_12px_rgba(0,255,255,0.3)] transition-all duration-300"
               >
                 <option value="ruthless">🔥 Ruthless</option>
                 <option value="drlove">💘 Dr Love</option>
