@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { sendToRuthless } from "./api";
 import logo from "./ruthless-logo.png";
-import "./App.css";
 
 export default function App() {
   // Personality intro lines
@@ -90,18 +89,12 @@ export default function App() {
 
       {!started && (
         <div className="flex justify-center items-center h-[40vh] transition-all duration-700 animate-fadeIn">
-          <div className="relative">
-            <img
-              src={logo}
-              alt="RuthlessAI Logo"
-              className="w-[280px] sm:w-[400px] md:w-[500px] drop-shadow-[0_0_40px_rgba(0,255,255,0.8)]"
-            />
-            {/* Red blinking eyes overlay (blinks twice during startup) */}
-            <div className="absolute top-[40%] left-[42%] w-[16%] h-[18%] flex justify-between">
-              <div className="w-[40%] h-[100%] bg-red-600 rounded-full animate-eyeBlink"></div>
-              <div className="w-[40%] h-[100%] bg-red-600 rounded-full animate-eyeBlink"></div>
-            </div>
-          </div>
+          <img
+            src={logo}
+            alt="RuthlessAI Logo"
+            className="w-[280px] sm:w-[400px] md:w-[500px] 
+            drop-shadow-[0_0_40px_rgba(0,255,255,0.8)] animate-pulse-slow"
+          />
         </div>
       )}
 
