@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { sendToRuthless } from "./api";
 import logo from "./ruthless-logo.png";
+import "./App.css"; // make sure this is imported
 
 export default function App() {
   const [messages, setMessages] = useState([
@@ -97,7 +98,7 @@ export default function App() {
             src={logo}
             alt="RuthlessAI Logo"
             className="w-[280px] sm:w-[400px] md:w-[500px] 
-            drop-shadow-[0_0_40px_rgba(0,255,255,0.8)] animate-pulse-slow"
+            drop-shadow-[0_0_40px_rgba(0,255,255,0.8)] animate-fadeIn"
           />
         </div>
       )}
@@ -110,9 +111,8 @@ export default function App() {
         } bg-white/5 backdrop-blur-md border border-white/10 
         rounded-2xl shadow-lg p-6`}
       >
-        {/* Centered dropdown, removed RUT#L3SS_AI */}
-        <div className="flex justify-center items-center mb-2 relative">
-          <div className="relative">
+        <div className="flex justify-center items-center mb-2 relative w-full">
+          <div className="relative mx-auto">
             <select
               value={mode}
               onChange={(e) => setMode(e.target.value)}
