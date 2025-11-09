@@ -129,7 +129,7 @@ export default function App() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
+        {/* ✅ Fixed Send button (back to old look) */}
         <form
           onSubmit={sendMessage}
           className="flex items-center border border-white/10 rounded-xl 
@@ -146,13 +146,8 @@ export default function App() {
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 text-sm font-semibold bg-cyan-600 
-            hover:bg-cyan-500 transition-all"
+            className="px-5 py-3 bg-cyan-600 hover:bg-cyan-500 
+            font-semibold text-white transition-all duration-200 
+            active:scale-95 disabled:opacity-60"
           >
             Send
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-}
