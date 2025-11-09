@@ -104,7 +104,7 @@ export default function App() {
             ? "max-w-3xl h-[90vh] flex flex-col justify-between"
             : "max-w-md"
         } bg-white/5 backdrop-blur-md border border-white/10 
-        rounded-2xl shadow-lg p-6`}
+        rounded-2xl shadow-[0_0_30px_rgba(0,255,255,0.1)] p-6`}
       >
         {/* Header and dropdown */}
         <div className="flex flex-col items-center justify-center mb-4">
@@ -117,7 +117,7 @@ export default function App() {
               <select
                 value={mode}
                 onChange={(e) => setMode(e.target.value)}
-                className="bg-transparent text-cyan-400 border border-cyan-500/30 rounded-lg px-2 py-1 text-sm focus:outline-none appearance-none pr-6"
+                className="bg-transparent text-cyan-400 border border-cyan-500/30 rounded-lg px-2 py-1 text-sm focus:outline-none appearance-none pr-6 hover:border-cyan-400 transition-all duration-200"
               >
                 <option value="ruthless">🔥 Ruthless</option>
                 <option value="drlove">💘 Dr Love</option>
@@ -153,8 +153,10 @@ export default function App() {
             </div>
           ))}
           {loading && (
-            <div className="text-cyan-400 text-sm font-mono animate-pulse">
-              Thinking...
+            <div className="flex space-x-1 justify-start text-cyan-400 text-sm font-mono">
+              <span className="animate-bounce">•</span>
+              <span className="animate-bounce delay-150">•</span>
+              <span className="animate-bounce delay-300">•</span>
             </div>
           )}
           <div ref={messagesEndRef} />
@@ -178,7 +180,7 @@ export default function App() {
             type="submit"
             disabled={loading}
             className="px-5 py-3 bg-cyan-600 hover:bg-cyan-500 
-            active:bg-cyan-700 text-white font-semibold transition-all duration-200 
+            active:scale-95 active:bg-cyan-700 text-white font-semibold transition-all duration-200 
             rounded-none disabled:opacity-60 disabled:cursor-not-allowed"
           >
             Send
