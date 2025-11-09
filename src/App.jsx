@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { sendToRuthless } from "./api";
 import logo from "./ruthless-logo.png";
 
@@ -9,6 +9,7 @@ export default function App() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [started, setStarted] = useState(false);
+  const messagesEndRef = useRef(null);
 
   // Keep Render awake
   useEffect(() => {
@@ -18,6 +19,11 @@ export default function App() {
     const interval = setInterval(ping, 45000);
     return () => clearInterval(interval);
   }, []);
+
+  // 👇 Auto-scroll to latest message whenever messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -34,11 +40,11 @@ export default function App() {
     // ✨ Format AI text with spacing and inline emojis (GPT-style)
     const emojiSet = ["😎", "🤖", "💬", "⚡", "✨", "🧠", "🔥", "👀", "😄"];
     const randomEmoji = emojiSet[Math.floor(Math.random() * emojiSet.length)];
-    const formatted = aiReply
-      .replace(/\n{2,}/g, "<br><br>") // double line = paragraph
-      .replace(/\n/g, "<br>") // single = new line
-      .replace(/([.!?])\s+/g, "$1&nbsp;&nbsp;") // slight space after punctuation
-      + ` ${randomEmoji}`;
+    const formatted =
+      aiReply
+        .replace(/\n{2,}/g, "<br><br>") // double line = paragraph
+        .replace(/\n/g, "<br>") // single = new line
+        .replace(/([.!?])\s+/g, "$1&nbsp;&nbsp;") + ` ${randomEmoji}`;
 
     setMessages((prev) => [...prev, { role: "ai", content: formatted }]);
     setLoading(false);
@@ -102,6 +108,8 @@ export default function App() {
               RuthlessAI is thinking...
             </div>
           )}
+          {/* 👇 Always scrolls to here */}
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Input */}

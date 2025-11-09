@@ -26,6 +26,19 @@
   border-radius: 6px;
 }
 
+/* Prevent zoom on iPhone/Chrome iOS */
+input,
+textarea {
+  font-size: 16px !important;
+}
+
+/* Make typing area comfortable */
+input {
+  padding: 12px 14px;
+  line-height: 1.4;
+}
+
+/* Animation pulse for logo */
 @keyframes pulse-slow {
   0%, 100% {
     transform: scale(1);
@@ -38,32 +51,4 @@
 }
 .animate-pulse-slow {
   animation: pulse-slow 4s ease-in-out infinite;
-}
-
-/* === Mobile fullscreen chat when typing === */
-@media (max-width: 768px) {
-  .input-focused {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    background: rgba(0, 0, 0, 0.95);
-    z-index: 50;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 1rem;
-  }
-
-  .input-focused .messages {
-    flex: 1;
-    overflow-y: auto;
-    margin-bottom: 1rem;
-  }
-
-  .input-focused form {
-    position: relative;
-    width: 100%;
-  }
 }
