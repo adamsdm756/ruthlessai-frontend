@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { sendToRuthless } from "./api";
 import logo from "./ruthless-logo.png";
 
@@ -9,7 +9,6 @@ export default function App() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [started, setStarted] = useState(false);
-  const messagesEndRef = useRef(null);
 
   // Keep Render awake
   useEffect(() => {
@@ -19,11 +18,6 @@ export default function App() {
     const interval = setInterval(ping, 45000);
     return () => clearInterval(interval);
   }, []);
-
-  // Auto-scroll to newest message
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -37,26 +31,16 @@ export default function App() {
 
     const aiReply = await sendToRuthless([...messages, userMessage]);
 
-    // Typing effect
+    // ✨ Format AI text with spacing and inline emojis (GPT-style)
     const emojiSet = ["😎", "🤖", "💬", "⚡", "✨", "🧠", "🔥", "👀", "😄"];
     const randomEmoji = emojiSet[Math.floor(Math.random() * emojiSet.length)];
     const formatted = aiReply
-      .replace(/\n{2,}/g, "<br><br>")
-      .replace(/\n/g, "<br>")
-      .replace(/([.!?])\s+/g, "$1&nbsp;&nbsp;") + ` ${randomEmoji}`;
+      .replace(/\n{2,}/g, "<br><br>") // double line = paragraph
+      .replace(/\n/g, "<br>") // single = new line
+      .replace(/([.!?])\s+/g, "$1&nbsp;&nbsp;") // slight space after punctuation
+      + ` ${randomEmoji}`;
 
-    let displayText = "";
-    setMessages((prev) => [...prev, { role: "ai", content: "" }]);
-    for (let i = 0; i < formatted.length; i++) {
-      displayText += formatted[i];
-      await new Promise((r) => setTimeout(r, 8));
-      setMessages((prev) => {
-        const newMsgs = [...prev];
-        newMsgs[newMsgs.length - 1].content = displayText;
-        return newMsgs;
-      });
-    }
-
+    setMessages((prev) => [...prev, { role: "ai", content: formatted }]);
     setLoading(false);
   };
 
@@ -96,16 +80,17 @@ export default function App() {
         </p>
 
         {/* Messages */}
-        <div className="messages flex-1 space-y-6 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-gray-600 pr-2">
+        <div className="flex-1 space-y-6 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-gray-600">
           {messages.map((msg, i) => (
             <div
               key={i}
-              className={`message animate-fadeInUp ${
+              className={`${
                 msg.role === "ai"
-                  ? "ai bg-cyan-500/10 self-start"
-                  : "user bg-red-500/10 self-end"
-              }`}
+                  ? "text-cyan-300 text-left"
+                  : "text-red-400 text-right"
+              } text-sm font-mono leading-relaxed`}
             >
+              {msg.role === "ai" ? "RuthlessAI: " : "You: "}
               <span
                 className="text-gray-300"
                 dangerouslySetInnerHTML={{ __html: msg.content }}
@@ -117,7 +102,6 @@ export default function App() {
               RuthlessAI is thinking...
             </div>
           )}
-          <div ref={messagesEndRef} />
         </div>
 
         {/* Input */}

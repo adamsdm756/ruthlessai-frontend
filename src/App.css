@@ -5,31 +5,16 @@
   text-align: center;
 }
 
-/* Message bubbles */
-.message {
-  padding: 10px 14px;
-  border-radius: 10px;
-  max-width: 90%;
-  font-family: monospace;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  word-break: break-word;
-  animation: fadeInUp 0.4s ease both;
-}
-.message.ai {
-  align-self: flex-start;
-  color: #8efaff;
-}
-.message.user {
-  align-self: flex-end;
-  color: #ffb2b2;
-}
-
 /* Smooth text spacing like GPT */
 .text-gray-300 {
   line-height: 1.8;
   white-space: normal;
   word-break: break-word;
+}
+
+/* Extra breathing room between AI replies */
+.space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1.75rem;
 }
 
 /* Chat body scrollbar */
@@ -41,31 +26,14 @@
   border-radius: 6px;
 }
 
-/* Fade-in animation for messages */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.animate-fadeInUp {
-  animation: fadeInUp 0.4s ease both;
-}
-
-/* Logo slow pulse */
 @keyframes pulse-slow {
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
-    filter: drop-shadow(0 0 25px rgba(0, 255, 255, 0.6));
+    filter: drop-shadow(0 0 25px rgba(0,255,255,0.6));
   }
   50% {
     transform: scale(1.05);
-    filter: drop-shadow(0 0 50px rgba(0, 255, 255, 0.9));
+    filter: drop-shadow(0 0 50px rgba(0,255,255,0.9));
   }
 }
 .animate-pulse-slow {
