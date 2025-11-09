@@ -11,27 +11,17 @@ export default function App() {
   const [started, setStarted] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // === ChatGPT-style iPhone viewport + zoom fix ===
+  // ✅ Light iOS height fix (no viewport lock)
   useEffect(() => {
-    const meta = document.createElement("meta");
-    meta.name = "viewport";
-    meta.content =
-      "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover";
-    document.head.appendChild(meta);
-
-    const setVH = () => {
+    const setVh = () => {
       document.documentElement.style.setProperty(
         "--vh",
         `${window.innerHeight * 0.01}px`
       );
     };
-    setVH();
-    window.addEventListener("resize", setVH);
-
-    return () => {
-      window.removeEventListener("resize", setVH);
-      document.head.removeChild(meta);
-    };
+    setVh();
+    window.addEventListener("resize", setVh);
+    return () => window.removeEventListener("resize", setVh);
   }, []);
 
   // Keep Render awake
@@ -130,6 +120,7 @@ export default function App() {
               RuthlessAI is thinking...
             </div>
           )}
+          {/* 👇 Scroll anchor */}
           <div ref={messagesEndRef} />
         </div>
 
