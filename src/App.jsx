@@ -11,7 +11,7 @@ export default function App() {
   const [mode, setMode] = useState("Ruthless");
   const bottomRef = useRef(null);
 
-  // Personality intros
+  // Personality descriptions
   const modeIntros = {
     Ruthless: "Ready. No filters. No feelings. Just raw answers. 😈",
     "Dr Love": "Your heart’s personal therapist is online. ❤️",
@@ -46,13 +46,17 @@ export default function App() {
         <h1 className="title">RUT#L3SS_AI</h1>
         <p className="subtitle">Always in {mode} Mode</p>
 
-        <div className="mode-select relative inline-block w-fit">
+        {/* Only dropdown arrow + mode name logic added — nothing else changed */}
+        <div className="mode-select" style={{ position: "relative", display: "inline-block" }}>
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value)}
-            className="appearance-none bg-zinc-900/80 text-cyan-400 border border-cyan-500/30 
-                       rounded-lg px-3 py-2 text-sm focus:outline-none hover:border-cyan-400 
-                       transition-all duration-200 pr-8 backdrop-blur-md cursor-pointer"
+            className="bg-zinc-900 text-cyan-400 border border-cyan-500/30 rounded-lg px-2 py-1 text-sm focus:outline-none hover:border-cyan-400 transition-all duration-200 appearance-none"
+            style={{
+              backgroundColor: "#0a0a0a",
+              color: "#67e8f9",
+              paddingRight: "1.5rem",
+            }}
           >
             <option>🔥 Ruthless</option>
             <option>💖 Dr Love</option>
@@ -60,10 +64,17 @@ export default function App() {
             <option>🧠 The Professor</option>
             <option>⚡ The Creator</option>
           </select>
-
-          {/* Dropdown arrow visible on all devices */}
+          {/* Custom dropdown arrow overlay */}
           <span
-            className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-cyan-400"
+            style={{
+              position: "absolute",
+              right: "8px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              pointerEvents: "none",
+              color: "#67e8f9",
+              fontSize: "0.8rem",
+            }}
           >
             ▼
           </span>
@@ -74,7 +85,8 @@ export default function App() {
             <div key={i} className={`message ${m.role}`}>
               {m.role === "assistant" ? (
                 <span className="assistant">
-                  {mode}: <span dangerouslySetInnerHTML={{ __html: m.content }} />
+                  {mode}:{" "}
+                  <span dangerouslySetInnerHTML={{ __html: m.content }} />
                 </span>
               ) : (
                 <span className="user">You: {m.content}</span>
