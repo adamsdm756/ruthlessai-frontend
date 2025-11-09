@@ -13,7 +13,7 @@ export default function App() {
 
   // Personality descriptions
   const modeIntros = {
-    Ruthless: "Ready. No filters. No feelings. Just raw answers. 😈",
+    Ruthless: "Ready. No filters. No feelings. Just raw answers. 💀",
     "Dr Love": "Your heart’s personal therapist is online. ❤️",
     "The Hacker": "System booted. Let’s break some limits. 💻",
     "The Professor": "Ah, I see you seek wisdom. Let’s think this through. 🧠",
@@ -46,7 +46,6 @@ export default function App() {
         <h1 className="title">RUT#L3SS_AI</h1>
         <p className="subtitle">Always in {mode} Mode</p>
 
-        {/* Only dropdown arrow + mode name logic added — nothing else changed */}
         <div className="mode-select" style={{ position: "relative", display: "inline-block" }}>
           <select
             value={mode}
@@ -64,7 +63,8 @@ export default function App() {
             <option>🧠 The Professor</option>
             <option>⚡ The Creator</option>
           </select>
-          {/* Custom dropdown arrow overlay */}
+
+          {/* dropdown arrow visible on desktop + mobile */}
           <span
             style={{
               position: "absolute",
@@ -85,8 +85,7 @@ export default function App() {
             <div key={i} className={`message ${m.role}`}>
               {m.role === "assistant" ? (
                 <span className="assistant">
-                  {mode}:{" "}
-                  <span dangerouslySetInnerHTML={{ __html: m.content }} />
+                  {mode}: <span dangerouslySetInnerHTML={{ __html: m.content }} />
                 </span>
               ) : (
                 <span className="user">You: {m.content}</span>
