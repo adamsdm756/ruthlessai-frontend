@@ -1,18 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { sendToRuthless } from "./api";
 import logo from "./ruthless-logo.png";
-import "./App.css"; // make sure this is imported
 
 export default function App() {
-  const [messages, setMessages] = useState([
-    { role: "ai", content: "Ready. No filters. No feelings. Just raw answers." },
-  ]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [started, setStarted] = useState(false);
-  const [mode, setMode] = useState("ruthless");
-  const messagesEndRef = useRef(null);
-
+  // Personality intro lines
   const modeIntros = {
     ruthless: "Ready. No filters. No feelings. Just raw answers. 💀",
     drlove: "Your heart’s personal therapist is online. ❤️",
@@ -21,9 +12,14 @@ export default function App() {
     creator: "Imagination engaged. Let’s build something legendary. ⚡",
   };
 
-  useEffect(() => {
-    setMessages([{ role: "ai", content: modeIntros[mode] }]);
-  }, [mode]);
+  const [mode, setMode] = useState("ruthless");
+  const [messages, setMessages] = useState([
+    { role: "ai", content: modeIntros["ruthless"] },
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [started, setStarted] = useState(false);
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -46,6 +42,11 @@ export default function App() {
     const interval = setInterval(ping, 45000);
     return () => clearInterval(interval);
   }, []);
+
+  // Update intro message when mode changes
+  useEffect(() => {
+    setMessages([{ role: "ai", content: modeIntros[mode] }]);
+  }, [mode]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -75,30 +76,24 @@ export default function App() {
     setLoading(false);
   };
 
-  const modeLabels = {
-    ruthless: "Ruthless",
-    drlove: "Dr Love",
-    hacker: "The Hacker",
-    professor: "The Professor",
-    creator: "The Creator",
-  };
-
   return (
     <div
       className={`relative min-h-screen flex flex-col items-center justify-center 
       bg-gradient-to-b from-black via-zinc-900 to-black text-white overflow-hidden 
       transition-all duration-700 ${started ? "pt-6" : ""}`}
     >
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
-      bg-cyan-500/20 blur-[200px] rounded-full animate-pulse"></div>
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
+      bg-cyan-500/20 blur-[200px] rounded-full animate-pulse"
+      ></div>
 
       {!started && (
-        <div className="flex justify-center items-center h-[40vh] transition-all duration-700">
+        <div className="flex justify-center items-center h-[40vh] transition-all duration-700 animate-fadeIn">
           <img
             src={logo}
             alt="RuthlessAI Logo"
             className="w-[280px] sm:w-[400px] md:w-[500px] 
-            drop-shadow-[0_0_40px_rgba(0,255,255,0.8)] animate-fadeIn"
+            drop-shadow-[0_0_40px_rgba(0,255,255,0.8)] animate-pulse-slow"
           />
         </div>
       )}
@@ -111,31 +106,33 @@ export default function App() {
         } bg-white/5 backdrop-blur-md border border-white/10 
         rounded-2xl shadow-lg p-6`}
       >
-        <div className="flex justify-center items-center mb-2 relative w-full">
-          <div className="relative mx-auto">
-            <select
-              value={mode}
-              onChange={(e) => setMode(e.target.value)}
-              className="bg-transparent text-cyan-400 border border-cyan-500/30 
-              rounded-lg px-2 py-1 text-sm focus:outline-none appearance-none 
-              hover:bg-white/5 transition-all duration-200 pr-6"
-            >
-              <option value="ruthless">🔥 Ruthless</option>
-              <option value="drlove">💘 Dr Love</option>
-              <option value="hacker">💻 The Hacker</option>
-              <option value="professor">🧠 The Professor</option>
-              <option value="creator">🎨 The Creator</option>
-            </select>
-            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-cyan-400 text-xs">
-              ▼
-            </span>
+        {/* Header and dropdown */}
+        <div className="flex flex-col items-center justify-center mb-4">
+          <h1 className="text-2xl font-bold text-cyan-400 tracking-widest mb-2">
+            RUT#L3SS_AI
+          </h1>
+          <div className="flex items-center space-x-2">
+            <span className="text-cyan-400 font-semibold">Mode:</span>
+            <div className="relative">
+              <select
+                value={mode}
+                onChange={(e) => setMode(e.target.value)}
+                className="bg-transparent text-cyan-400 border border-cyan-500/30 rounded-lg px-2 py-1 text-sm focus:outline-none appearance-none pr-6"
+              >
+                <option value="ruthless">🔥 Ruthless</option>
+                <option value="drlove">💘 Dr Love</option>
+                <option value="hacker">💻 The Hacker</option>
+                <option value="professor">🧠 The Professor</option>
+                <option value="creator">🎨 The Creator</option>
+              </select>
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-cyan-400 pointer-events-none">
+                ▼
+              </span>
+            </div>
           </div>
         </div>
 
-        <p className="text-sm text-center text-gray-400 mb-6">
-          Mode: {modeLabels[mode]}
-        </p>
-
+        {/* Messages */}
         <div className="flex-1 space-y-6 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-gray-600">
           {messages.map((msg, i) => (
             <div
@@ -147,7 +144,7 @@ export default function App() {
               } text-sm font-mono leading-relaxed`}
             >
               {msg.role === "ai"
-                ? `${modeLabels[mode]}: `
+                ? `${mode.charAt(0).toUpperCase() + mode.slice(1)}: `
                 : "You: "}
               <span
                 className="text-gray-300"
@@ -163,6 +160,7 @@ export default function App() {
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Input box */}
         <form
           onSubmit={sendMessage}
           className="flex items-center border border-white/10 rounded-xl 
