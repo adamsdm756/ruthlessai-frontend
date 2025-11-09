@@ -5,19 +5,19 @@
   text-align: center;
 }
 
-/* Smooth text spacing like GPT */
+/* Readable text spacing */
 .text-gray-300 {
   line-height: 1.8;
   white-space: normal;
   word-break: break-word;
 }
 
-/* Extra breathing room between AI replies */
+/* Space between messages */
 .space-y-6 > :not([hidden]) ~ :not([hidden]) {
   margin-top: 1.75rem;
 }
 
-/* Chat body scrollbar */
+/* Scrollbar */
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
 }
@@ -29,17 +29,17 @@
 /* Prevent zoom on iPhone/Chrome iOS */
 input,
 textarea {
-  font-size: 17px !important; /* lock zoom */
+  font-size: 16px !important;
   -webkit-text-size-adjust: 100%;
 }
 
-/* Comfortable typing area */
+/* Comfortable typing */
 input {
   padding: 12px 14px;
   line-height: 1.4;
 }
 
-/* Animation pulse for logo */
+/* Animated logo */
 @keyframes pulse-slow {
   0%, 100% {
     transform: scale(1);
@@ -54,23 +54,26 @@ input {
   animation: pulse-slow 4s ease-in-out infinite;
 }
 
-/* === iPhone/Chrome iOS — No zoom, no bounce === */
+/* === Real Mobile Viewport Fix === */
+html,
+body {
+  height: calc(var(--vh, 1vh) * 100);
+  background: black;
+  overflow-x: hidden;
+}
+
+.min-h-screen {
+  min-height: calc(var(--vh, 1vh) * 100);
+}
+
 @supports (-webkit-touch-callout: none) {
-  html,
   body {
-    height: calc(var(--vh, 1vh) * 100);
-    overflow: hidden;
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior: none;
-    background-color: black;
   }
 
   input:focus,
   textarea:focus {
     scroll-behavior: smooth;
-  }
-
-  .min-h-screen {
-    min-height: calc(var(--vh, 1vh) * 100);
   }
 }
