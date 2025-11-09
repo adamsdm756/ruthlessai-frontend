@@ -12,7 +12,6 @@ export default function App() {
   const [mode, setMode] = useState("ruthless");
   const messagesEndRef = useRef(null);
 
-  // Personality descriptions
   const modeIntros = {
     ruthless: "Ready. No filters. No feelings. Just raw answers. 💀",
     drlove: "Your heart’s personal therapist is online. ❤️",
@@ -75,7 +74,6 @@ export default function App() {
     setLoading(false);
   };
 
-  // Friendly label text for each mode
   const modeLabels = {
     ruthless: "Ruthless",
     drlove: "Dr Love",
@@ -112,10 +110,8 @@ export default function App() {
         } bg-white/5 backdrop-blur-md border border-white/10 
         rounded-2xl shadow-lg p-6`}
       >
-        <div className="flex justify-between items-center mb-2 relative">
-          <h1 className="text-2xl font-bold text-cyan-400 tracking-widest">
-            RUT#L3SS_AI
-          </h1>
+        {/* Centered dropdown, removed RUT#L3SS_AI */}
+        <div className="flex justify-center items-center mb-2 relative">
           <div className="relative">
             <select
               value={mode}
@@ -130,7 +126,6 @@ export default function App() {
               <option value="professor">🧠 The Professor</option>
               <option value="creator">🎨 The Creator</option>
             </select>
-            {/* dropdown arrow visible everywhere */}
             <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-cyan-400 text-xs">
               ▼
             </span>
