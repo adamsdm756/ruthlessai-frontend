@@ -95,3 +95,19 @@ button:hover {
   animation: fadeIn 1.5s ease-out forwards;
 }
 
+@keyframes eyeBlink {
+  0%, 15%, 35%, 100% {
+    opacity: 0;
+    box-shadow: none;
+  }
+  5%, 25% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+  }
+}
+
+.animate-eyeBlink {
+  animation: eyeBlink 3s ease-in-out 1; /* lasts 3s, runs once */
+}
+
+
