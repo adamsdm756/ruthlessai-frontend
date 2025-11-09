@@ -11,6 +11,29 @@ export default function App() {
   const [started, setStarted] = useState(false);
   const messagesEndRef = useRef(null);
 
+  // === ChatGPT-style iPhone viewport + zoom fix ===
+  useEffect(() => {
+    const meta = document.createElement("meta");
+    meta.name = "viewport";
+    meta.content =
+      "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover";
+    document.head.appendChild(meta);
+
+    const setVH = () => {
+      document.documentElement.style.setProperty(
+        "--vh",
+        `${window.innerHeight * 0.01}px`
+      );
+    };
+    setVH();
+    window.addEventListener("resize", setVH);
+
+    return () => {
+      window.removeEventListener("resize", setVH);
+      document.head.removeChild(meta);
+    };
+  }, []);
+
   // Keep Render awake
   useEffect(() => {
     const ping = () =>
@@ -37,13 +60,12 @@ export default function App() {
 
     const aiReply = await sendToRuthless([...messages, userMessage]);
 
-    // ✨ Format AI text with spacing and inline emojis (GPT-style)
     const emojiSet = ["😎", "🤖", "💬", "⚡", "✨", "🧠", "🔥", "👀", "😄"];
     const randomEmoji = emojiSet[Math.floor(Math.random() * emojiSet.length)];
     const formatted =
       aiReply
-        .replace(/\n{2,}/g, "<br><br>") // double line = paragraph
-        .replace(/\n/g, "<br>") // single = new line
+        .replace(/\n{2,}/g, "<br><br>")
+        .replace(/\n/g, "<br>")
         .replace(/([.!?])\s+/g, "$1&nbsp;&nbsp;") + ` ${randomEmoji}`;
 
     setMessages((prev) => [...prev, { role: "ai", content: formatted }]);
@@ -108,7 +130,6 @@ export default function App() {
               RuthlessAI is thinking...
             </div>
           )}
-          {/* 👇 Always scrolls to here */}
           <div ref={messagesEndRef} />
         </div>
 

@@ -29,10 +29,11 @@
 /* Prevent zoom on iPhone/Chrome iOS */
 input,
 textarea {
-  font-size: 16px !important;
+  font-size: 17px !important; /* lock zoom */
+  -webkit-text-size-adjust: 100%;
 }
 
-/* Make typing area comfortable */
+/* Comfortable typing area */
 input {
   padding: 12px 14px;
   line-height: 1.4;
@@ -51,4 +52,25 @@ input {
 }
 .animate-pulse-slow {
   animation: pulse-slow 4s ease-in-out infinite;
+}
+
+/* === iPhone/Chrome iOS — No zoom, no bounce === */
+@supports (-webkit-touch-callout: none) {
+  html,
+  body {
+    height: calc(var(--vh, 1vh) * 100);
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+    background-color: black;
+  }
+
+  input:focus,
+  textarea:focus {
+    scroll-behavior: smooth;
+  }
+
+  .min-h-screen {
+    min-height: calc(var(--vh, 1vh) * 100);
+  }
 }
