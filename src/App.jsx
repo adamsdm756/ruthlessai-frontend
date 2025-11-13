@@ -118,12 +118,7 @@ export default function App() {
       }`}
     >
       {/* MATRIX BACKGROUND */}
-      {mode === "hacker" && (
-        <div className="matrix-bg">
-          <canvas id="matrix-canvas" className="matrix-canvas"></canvas>
-        </div>
-      )}
-
+   
       {/* REMOVE CYAN GLOW IN HACKER MODE */}
       {mode !== "hacker" && (
         <div
