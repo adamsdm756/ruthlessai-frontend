@@ -3,7 +3,7 @@ const PROXY_URL = "https://ruthless-proxyy.onrender.com"; // your working proxy
 // 🧠 Personalities mapped to their model or style
 const MODES = {
   ruthless: "ruthless-mistral",
-  drlove: "llama3",
+  drlove: "drlove-uncensored"
   hacker: "hacker-wizard",
 };
 
