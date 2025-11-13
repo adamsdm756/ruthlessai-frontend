@@ -2,6 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import { sendToRuthless } from "./api";
 import logo from "./ruthless-logo.png";
 
+/* ❤️ DR LOVE FLOATING HEARTS */
+function LoveHearts() {
+  return (
+    <div className="love-hearts-container">
+      {Array.from({ length: 18 }).map((_, i) => (
+        <div key={i} className="heart floating-heart">💗</div>
+      ))}
+    </div>
+  );
+}
+
 export default function App() {
   // Personality intro lines
   const modeIntros = {
@@ -81,6 +92,9 @@ export default function App() {
         started ? "pt-6" : ""
       }`}
     >
+
+      {/* ❤️ DR LOVE FLOATING HEARTS */}
+      {mode === "drlove" && <LoveHearts />}
 
       {/* ❤️ DR LOVE PINK GLOW */}
       {mode === "drlove" && <div className="drlove-glow"></div>}

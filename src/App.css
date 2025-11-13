@@ -183,3 +183,45 @@ button:hover {
 
 .hacker-input {
   border-color: #00ff88 !im
+
+/* ❤️ DR LOVE ANIMATED FLOATING HEARTS */
+.love-hearts-container {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-heart {
+  position: absolute;
+  font-size: 24px;
+  opacity: 0.7;
+  animation: floatUp 6s linear infinite;
+}
+
+/* Random placement */
+.floating-heart:nth-child(1) { left: 10%; animation-duration: 7s; }
+.floating-heart:nth-child(2) { left: 20%; animation-duration: 6s; }
+.floating-heart:nth-child(3) { left: 30%; animation-duration: 8s; }
+.floating-heart:nth-child(4) { left: 40%; animation-duration: 5.5s; }
+.floating-heart:nth-child(5) { left: 50%; animation-duration: 7.4s; }
+.floating-heart:nth-child(6) { left: 60%; animation-duration: 6.2s; }
+.floating-heart:nth-child(7) { left: 70%; animation-duration: 8.1s; }
+.floating-heart:nth-child(8) { left: 80%; animation-duration: 6.8s; }
+.floating-heart:nth-child(9) { left: 90%; animation-duration: 7.3s; }
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(120vh) scale(0.7);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
