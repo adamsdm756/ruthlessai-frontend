@@ -2,11 +2,11 @@ const PROXY_URL = "https://ruthless-proxyy.onrender.com"; // your working proxy
 
 // 🧠 Personalities mapped to their model or style
 const MODES = {
-  ruthless: "ruthless-mistral",
-  drlove: "drlove-mistral",
-  hacker: "hacker-mistral",
-  professor: "professor-mistral",
-  creator: "creator-mistral",
+  ruthless: "mistral",          // Ruthless
+  drlove: "llama3",             // Dr Love
+  hacker: "hacker-wizard",      // Hacker now uses WizardCoder model ONLY
+  professor: "mistral",         // Professor
+  creator: "llama3"             // Creator
 };
 
 export async function sendToRuthless(messages, mode = "ruthless") {

@@ -15,61 +15,6 @@ body {
   height: 100vh;
 }
 
-/* --------------------- */
-/* ❤️ DR LOVE FULL THEME */
-/* --------------------- */
-
-.drlove-bg {
-  background: linear-gradient(180deg, #ffb6d5, #ff8fcf, #ff69b4);
-}
-
-.drlove-glow {
-  position: absolute;
-  top: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 650px;
-  height: 650px;
-  background: radial-gradient(circle, rgba(255,182,213,0.55) 0%, rgba(255,105,180,0.35) 40%, rgba(255,105,180,0) 70%);
-  filter: blur(80px);
-  z-index: 0;
-  animation: lovePulse 6s ease-in-out infinite;
-}
-
-@keyframes lovePulse {
-  0%, 100% { transform: translateX(-50%) scale(1); }
-  50% { transform: translateX(-50%) scale(1.15); }
-}
-
-/* LOVE MESSAGE COLORS */
-.love-ai {
-  color: #ffd5e8 !important;
-  text-shadow: 0 0 6px rgba(255,175,215,0.9);
-}
-
-.love-user {
-  color: #ffe3f0 !important;
-  text-shadow: 0 0 6px rgba(255,200,230,0.8);
-}
-
-/* LOVE INPUT BAR */
-.love-input {
-  border-color: #ffb6d5 !important;
-  box-shadow: 0 0 12px rgba(255,150,200,0.4) !important;
-}
-
-.love-send-btn {
-  background: #ff6fa8 !important;
-  color: white !important;
-}
-.love-send-btn:hover {
-  background: #ff85b7 !important;
-}
-
-/* --------------------- */
-/* EXISTING CSS BELOW    */
-/* --------------------- */
-
 header {
   padding: 12px;
   background: #111;
@@ -140,8 +85,14 @@ button:hover {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .animate-fadeIn {
@@ -156,6 +107,7 @@ button:hover {
   animation: ambientPulse 6s ease-in-out infinite;
 }
 
+/* === MATRIX MODE BACKGROUND === */
 .matrix-bg {
   position: fixed;
   inset: 0;
@@ -171,6 +123,7 @@ button:hover {
   height: 100%;
 }
 
+/* === MATRIX MESSAGE COLORS === */
 .hacker-ai {
   color: #00ff88 !important;
   text-shadow: 0 0 5px #00ff88;
@@ -181,47 +134,21 @@ button:hover {
   text-shadow: 0 0 5px #009944;
 }
 
+/* OPTIONAL (soft neon glow for input) */
 .hacker-input {
-  border-color: #00ff88 !im
-
-/* ❤️ DR LOVE ANIMATED FLOATING HEARTS */
-.love-hearts-container {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
+  border-color: #00ff88 !important;
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.35);
 }
 
-.floating-heart {
-  position: absolute;
-  font-size: 24px;
-  opacity: 0.7;
-  animation: floatUp 6s linear infinite;
+.hacker-send-btn {
+  background: #00ff88 !important;
+  color: black !important;
+}
+.hacker-send-btn:hover {
+  background: #33ffaa !important;
 }
 
-/* Random placement */
-.floating-heart:nth-child(1) { left: 10%; animation-duration: 7s; }
-.floating-heart:nth-child(2) { left: 20%; animation-duration: 6s; }
-.floating-heart:nth-child(3) { left: 30%; animation-duration: 8s; }
-.floating-heart:nth-child(4) { left: 40%; animation-duration: 5.5s; }
-.floating-heart:nth-child(5) { left: 50%; animation-duration: 7.4s; }
-.floating-heart:nth-child(6) { left: 60%; animation-duration: 6.2s; }
-.floating-heart:nth-child(7) { left: 70%; animation-duration: 8.1s; }
-.floating-heart:nth-child(8) { left: 80%; animation-duration: 6.8s; }
-.floating-heart:nth-child(9) { left: 90%; animation-duration: 7.3s; }
-
-@keyframes floatUp {
-  0% {
-    transform: translateY(120vh) scale(0.7);
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-20vh) scale(1.2);
-    opacity: 0;
-  }
+#root {
+  position: relative;
+  z-index: 1;
 }
-
