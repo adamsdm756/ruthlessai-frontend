@@ -7,7 +7,7 @@ export default function App() {
   const modeIntros = {
     ruthless: "Ready. No filters. No feelings. Just raw answers.",
     drlove: "Your heart’s personal therapist is online. ❤️",
-    hacker: "I'm ready. Let’s break some limits. 💻",
+    hacker: "Matrix online. Systems unlocked. 💻",
     professor: "Ah, I see you seek wisdom. Let’s think this through. 🧠",
     creator: "Imagination engaged. Let’s build something legendary. ⚡",
   };
@@ -20,6 +20,43 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [started, setStarted] = useState(false);
   const messagesEndRef = useRef(null);
+
+  // MATRIX CANVAS EFFECT (ONLY FOR HACKER)
+  useEffect(() => {
+    if (mode !== "hacker") return;
+
+    const canvas = document.getElementById("matrix-canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = "01";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00ff88";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    const interval = setInterval(draw, 33);
+    return () => clearInterval(interval);
+  }, [mode]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,8 +72,7 @@ export default function App() {
     };
   }, []);
 
-
-  // Update intro message when mode changes
+  // Update intro when mode changes
   useEffect(() => {
     setMessages([{ role: "ai", content: modeIntros[mode] }]);
   }, [mode]);
@@ -75,6 +111,14 @@ export default function App() {
       bg-gradient-to-b from-black via-zinc-900 to-black text-white overflow-hidden 
       transition-all duration-700 ${started ? "pt-6" : ""}`}
     >
+
+      {/* MATRIX BACKGROUND */}
+      {mode === "hacker" && (
+        <div className="matrix-bg">
+          <canvas id="matrix-canvas" className="matrix-canvas"></canvas>
+        </div>
+      )}
+
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
       bg-cyan-500/20 blur-[200px] rounded-full animate-pulse"
@@ -99,11 +143,13 @@ export default function App() {
         } bg-white/5 backdrop-blur-md border border-white/10 
         rounded-2xl shadow-[0_0_30px_rgba(0,255,255,0.1)] p-6`}
       >
-        {/* Header and dropdown */}
+
+        {/* HEADER */}
         <div className="flex flex-col items-center justify-center mb-4">
           <h1 className="text-2xl font-bold text-cyan-400 tracking-widest mb-2">
             RUT#L3SS_AI
           </h1>
+
           <div className="flex items-center space-x-2">
             <span className="text-cyan-400 font-semibold">Mode:</span>
             <div className="relative">
@@ -120,6 +166,7 @@ export default function App() {
                 <option value="professor">🧠 The Professor</option>
                 <option value="creator">🎨 The Creator</option>
               </select>
+
               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-cyan-400 pointer-events-none">
                 ▼
               </span>
@@ -127,15 +174,19 @@ export default function App() {
           </div>
         </div>
 
-        {/* Messages */}
+        {/* MESSAGES */}
         <div className="flex-1 space-y-6 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-gray-600">
           {messages.map((msg, i) => (
             <div
               key={i}
               className={`${
                 msg.role === "ai"
-                  ? "text-cyan-300 text-left"
-                  : "text-red-400 text-right"
+                  ? mode === "hacker"
+                    ? "hacker-ai text-left"
+                    : "text-cyan-300 text-left"
+                  : mode === "hacker"
+                    ? "hacker-user text-right"
+                    : "text-red-400 text-right"
               } text-sm font-mono leading-relaxed`}
             >
               {msg.role === "ai"
@@ -147,6 +198,7 @@ export default function App() {
               ></span>
             </div>
           ))}
+
           {loading && (
             <div className="flex space-x-1 justify-start text-cyan-400 text-sm font-mono">
               <span className="animate-bounce">•</span>
@@ -157,11 +209,12 @@ export default function App() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input box */}
+        {/* INPUT BOX */}
         <form
           onSubmit={sendMessage}
-          className="flex items-center border border-white/10 rounded-xl 
-          overflow-hidden focus-within:ring-2 focus-within:ring-cyan-500/50 transition"
+          className={`flex items-center border border-white/10 rounded-xl 
+          overflow-hidden focus-within:ring-2 transition
+          ${mode === "hacker" ? "hacker-input focus-within:ring-green-400" : ""}`}
         >
           <input
             type="text"
@@ -171,12 +224,17 @@ export default function App() {
             className="flex-1 bg-transparent text-white placeholder-gray-500 
             px-3 py-3 text-base focus:outline-none"
           />
+
           <button
             type="submit"
             disabled={loading}
-            className="px-5 py-3 bg-cyan-600 hover:bg-cyan-500 
-            active:scale-95 active:bg-cyan-700 text-white font-semibold transition-all duration-200 
-            rounded-none disabled:opacity-60 disabled:cursor-not-allowed"
+            className={`px-5 py-3 font-semibold transition-all duration-200
+            rounded-none disabled:opacity-60 disabled:cursor-not-allowed
+            ${
+              mode === "hacker"
+                ? "hacker-send-btn"
+                : "bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700"
+            }`}
           >
             Send
           </button>
