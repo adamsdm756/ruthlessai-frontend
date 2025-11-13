@@ -32,6 +32,19 @@ export default function App() {
   const [started, setStarted] = useState(false);
   const messagesEndRef = useRef(null);
 
+  /* ✅ FIX: SHOW MATRIX ONLY IN HACKER MODE */
+  useEffect(() => {
+    const matrix = document.getElementById("matrix-container");
+    if (!matrix) return;
+
+    if (mode === "hacker") {
+      matrix.style.display = "block";   // show matrix only in hacker
+    } else {
+      matrix.style.display = "none";    // hide matrix in ALL other modes
+    }
+  }, [mode]);
+  /* END FIX */
+
   useEffect(() => {
     const handleResize = () => {
       const vh = window.innerHeight * 0.01;
