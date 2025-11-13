@@ -108,10 +108,15 @@ export default function App() {
   return (
     <div
       className={`relative min-h-screen flex flex-col items-center justify-center 
-      bg-gradient-to-b from-black via-zinc-900 to-black text-white overflow-hidden 
-      transition-all duration-700 ${started ? "pt-6" : ""}`}
+      ${
+        mode === "hacker"
+          ? "bg-black"
+          : "bg-gradient-to-b from-black via-zinc-900 to-black"
+      }
+      text-white overflow-hidden transition-all duration-700 ${
+        started ? "pt-6" : ""
+      }`}
     >
-
       {/* MATRIX BACKGROUND */}
       {mode === "hacker" && (
         <div className="matrix-bg">
@@ -119,10 +124,13 @@ export default function App() {
         </div>
       )}
 
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
+      {/* REMOVE CYAN GLOW IN HACKER MODE */}
+      {mode !== "hacker" && (
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
       bg-cyan-500/20 blur-[200px] rounded-full animate-pulse"
-      ></div>
+        ></div>
+      )}
 
       {!started && (
         <div className="flex justify-center items-center h-[40vh] transition-all duration-700 animate-fadeIn">
@@ -143,7 +151,6 @@ export default function App() {
         } bg-white/5 backdrop-blur-md border border-white/10 
         rounded-2xl shadow-[0_0_30px_rgba(0,255,255,0.1)] p-6`}
       >
-
         {/* HEADER */}
         <div className="flex flex-col items-center justify-center mb-4">
           <h1 className="text-2xl font-bold text-cyan-400 tracking-widest mb-2">
@@ -185,8 +192,8 @@ export default function App() {
                     ? "hacker-ai text-left"
                     : "text-cyan-300 text-left"
                   : mode === "hacker"
-                    ? "hacker-user text-right"
-                    : "text-red-400 text-right"
+                  ? "hacker-user text-right"
+                  : "text-red-400 text-right"
               } text-sm font-mono leading-relaxed`}
             >
               {msg.role === "ai"

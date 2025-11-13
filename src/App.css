@@ -95,7 +95,6 @@ button:hover {
   animation: fadeIn 1.5s ease-out forwards;
 }
 
-
 @keyframes ambientPulse {
   0%, 100% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.05); }
   50% { box-shadow: 0 0 35px rgba(0, 255, 255, 0.15); }
