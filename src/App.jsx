@@ -6,8 +6,8 @@ export default function App() {
   // Personality intro lines
   const modeIntros = {
     ruthless: "Ready. No filters. No feelings. Just raw answers.",
-    drlove: "Your heart’s personal therapist is online. ❤️",
-    hacker: "Matrix online. Systems unlocked. 💻",
+    drlove: "Dr. Love is at your service. Spill it out hoe. ❤️",
+    hacker: "I'm ready. Let’s get to work 💻",
     professor: "Ah, I see you seek wisdom. Let’s think this through. 🧠",
     creator: "Imagination engaged. Let’s build something legendary. ⚡",
   };
