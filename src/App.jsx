@@ -35,7 +35,6 @@ export default function App() {
     };
   }, []);
 
-  // Update intro when mode changes
   useEffect(() => {
     setMessages([{ role: "ai", content: modeIntros[mode] }]);
   }, [mode]);
@@ -74,18 +73,22 @@ export default function App() {
       ${
         mode === "hacker"
           ? "bg-transparent"
+          : mode === "drlove"
+          ? "drlove-bg"
           : "bg-gradient-to-b from-black via-zinc-900 to-black"
       }
       text-white overflow-hidden transition-all duration-700 ${
         started ? "pt-6" : ""
       }`}
     >
-      {/* CYAN GLOW WHEN NOT IN HACKER MODE */}
-      {mode !== "hacker" && (
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
-      bg-cyan-500/20 blur-[200px] rounded-full animate-pulse"
-        ></div>
+
+      {/* ❤️ DR LOVE PINK GLOW */}
+      {mode === "drlove" && <div className="drlove-glow"></div>}
+
+      {/* CYAN GLOW WHEN NOT IN HACKER OR DRLOVE */}
+      {mode !== "hacker" && mode !== "drlove" && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
+        bg-cyan-500/20 blur-[200px] rounded-full animate-pulse"></div>
       )}
 
       {!started && (
@@ -105,23 +108,33 @@ export default function App() {
             ? "max-w-3xl h-[90vh] flex flex-col justify-between"
             : "max-w-md"
         } bg-white/5 backdrop-blur-md border border-white/10 
-        rounded-2xl shadow-[0_0_30px_rgba(0,255,255,0.1)] p-6`}
+        rounded-2xl shadow-[0_0_30px_rgba(255,150,200,0.2)] p-6`}
       >
         {/* HEADER */}
         <div className="flex flex-col items-center justify-center mb-4">
-          <h1 className="text-2xl font-bold text-cyan-400 tracking-widest mb-2">
+          <h1
+            className={`text-2xl font-bold ${
+              mode === "drlove" ? "text-pink-300" : "text-cyan-400"
+            } tracking-widest mb-2`}
+          >
             RUT#L3SS_AI
           </h1>
 
           <div className="flex items-center space-x-2">
-            <span className="text-cyan-400 font-semibold">Mode:</span>
+            <span
+              className={`font-semibold ${
+                mode === "drlove" ? "text-pink-300" : "text-cyan-400"
+              }`}
+            >
+              Mode:
+            </span>
             <div className="relative">
               <select
                 value={mode}
                 onChange={(e) => setMode(e.target.value)}
-                className="bg-transparent text-cyan-400 border border-cyan-500/30 rounded-lg 
-                px-2 py-1 text-sm focus:outline-none appearance-none pr-6 
-                hover:border-cyan-400 hover:shadow-[0_0_12px_rgba(0,255,255,0.3)] transition-all duration-300"
+                className={`bg-transparent ${
+                  mode === "drlove" ? "text-pink-300 border-pink-400" : "text-cyan-400 border-cyan-500/30"
+                } border rounded-lg px-2 py-1 text-sm focus:outline-none appearance-none pr-6`}
               >
                 <option value="ruthless">🔥 Ruthless</option>
                 <option value="drlove">💘 Dr Love</option>
@@ -130,7 +143,11 @@ export default function App() {
                 <option value="creator">🎨 The Creator</option>
               </select>
 
-              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-cyan-400 pointer-events-none">
+              <span
+                className={`absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none ${
+                  mode === "drlove" ? "text-pink-300" : "text-cyan-400"
+                }`}
+              >
                 ▼
               </span>
             </div>
@@ -146,9 +163,13 @@ export default function App() {
                 msg.role === "ai"
                   ? mode === "hacker"
                     ? "hacker-ai text-left"
+                    : mode === "drlove"
+                    ? "love-ai text-left"
                     : "text-cyan-300 text-left"
                   : mode === "hacker"
                   ? "hacker-user text-right"
+                  : mode === "drlove"
+                  ? "love-user text-right"
                   : "text-red-400 text-right"
               } text-sm font-mono leading-relaxed`}
             >
@@ -163,7 +184,11 @@ export default function App() {
           ))}
 
           {loading && (
-            <div className="flex space-x-1 justify-start text-cyan-400 text-sm font-mono">
+            <div
+              className={`flex space-x-1 justify-start text-sm font-mono ${
+                mode === "drlove" ? "text-pink-300" : "text-cyan-400"
+              }`}
+            >
               <span className="animate-bounce">•</span>
               <span className="animate-bounce delay-150">•</span>
               <span className="animate-bounce delay-300">•</span>
@@ -177,7 +202,13 @@ export default function App() {
           onSubmit={sendMessage}
           className={`flex items-center border border-white/10 rounded-xl 
           overflow-hidden focus-within:ring-2 transition
-          ${mode === "hacker" ? "hacker-input focus-within:ring-green-400" : ""}`}
+          ${
+            mode === "hacker"
+              ? "hacker-input focus-within:ring-green-400"
+              : mode === "drlove"
+              ? "love-input focus-within:ring-pink-300"
+              : ""
+          }`}
         >
           <input
             type="text"
@@ -196,6 +227,8 @@ export default function App() {
             ${
               mode === "hacker"
                 ? "hacker-send-btn"
+                : mode === "drlove"
+                ? "love-send-btn"
                 : "bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700"
             }`}
           >
