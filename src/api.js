@@ -5,8 +5,6 @@ const MODES = {
   ruthless: "ruthless-mistral",
   drlove: "llama3",
   hacker: "hacker-wizard",
-  professor: "mistral",
-  creator: "llama3"
 };
 
 
