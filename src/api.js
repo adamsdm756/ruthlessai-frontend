@@ -1,31 +1,26 @@
 const PROXY_URL = "https://ruthless-proxyy.onrender.com"; // your working proxy
 
-// 🧠 Personalities mapped to their model or style
+// 🧠 Personalities mapped to their model names
 const MODES = {
-  ruthless: "ruthless-uncensored",
-  drlove: "drlove-uncensored"
-  hacker: "hacker-wizard",
+  ruthless: "ruthless-uncensored",   // ← THE ONE YOU JUST CREATED
+  drlove: "drlove-uncensored",       // ← YOU ALSO CREATED THIS
+  hacker: "hacker-wizard"            // ← Your hacker model
 };
-
 
 export async function sendToRuthless(messages, mode = "ruthless") {
   const userMessage = messages[messages.length - 1]?.content || "";
 
-  // 🎭 Inject personality tone (so same model, different behavior)
+  // 🎭 Inject personality tone
   let prefix = "";
   switch (mode) {
     case "drlove":
       prefix = "💞 You are Dr Love — charming, warm, flirty yet insightful. Give emotionally intelligent relationship advice.";
       break;
+
     case "hacker":
       prefix = "💻 You are The Hacker — clever, fast, technical, and confident. Explain coding or tech with precision.";
       break;
-    case "professor":
-      prefix = "🎓 You are The Professor, an articulate and insightful teacher who explains with clarity and precision.";
-      break;
-    case "creator":
-      prefix = "🎨 You are The Creator — imaginative and expressive. Help with creative writing, ideas, and inspiration.";
-      break;
+
     default:
       prefix = "😈 You are Ruthless — brutally honest, confident, and unfiltered. Never apologize. Always tell it straight.";
   }
