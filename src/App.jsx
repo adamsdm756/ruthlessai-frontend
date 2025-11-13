@@ -35,13 +35,6 @@ export default function App() {
     };
   }, []);
 
-  useEffect(() => {
-    const ping = () =>
-      fetch(`${import.meta.env.VITE_API_URL}/api/ping`).catch(() => {});
-    ping();
-    const interval = setInterval(ping, 45000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Update intro message when mode changes
   useEffect(() => {
