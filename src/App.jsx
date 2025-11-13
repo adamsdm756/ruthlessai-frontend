@@ -21,43 +21,6 @@ export default function App() {
   const [started, setStarted] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // MATRIX CANVAS EFFECT (ONLY FOR HACKER)
-  useEffect(() => {
-    if (mode !== "hacker") return;
-
-    const canvas = document.getElementById("matrix-canvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const chars = "01";
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "#00ff88";
-      ctx.font = fontSize + "px monospace";
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-    }
-
-    const interval = setInterval(draw, 33);
-    return () => clearInterval(interval);
-  }, [mode]);
-
   useEffect(() => {
     const handleResize = () => {
       const vh = window.innerHeight * 0.01;
@@ -117,9 +80,7 @@ export default function App() {
         started ? "pt-6" : ""
       }`}
     >
-      {/* MATRIX BACKGROUND */}
-   
-      {/* REMOVE CYAN GLOW IN HACKER MODE */}
+      {/* CYAN GLOW WHEN NOT IN HACKER MODE */}
       {mode !== "hacker" && (
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
