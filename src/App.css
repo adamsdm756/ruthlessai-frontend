@@ -143,3 +143,8 @@ button:hover {
 .hacker-send-btn:hover {
   background: #33ffaa !important;
 }
+
+#root {
+  position: relative;
+  z-index: 1;
+}
