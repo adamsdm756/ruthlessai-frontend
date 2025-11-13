@@ -110,7 +110,7 @@ export default function App() {
       className={`relative min-h-screen flex flex-col items-center justify-center 
       ${
         mode === "hacker"
-          ? "bg-black"
+          ? "bg-transparent"
           : "bg-gradient-to-b from-black via-zinc-900 to-black"
       }
       text-white overflow-hidden transition-all duration-700 ${
