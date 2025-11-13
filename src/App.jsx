@@ -126,8 +126,6 @@ export default function App() {
                 <option value="ruthless">🔥 Ruthless</option>
                 <option value="drlove">💘 Dr Love</option>
                 <option value="hacker">💻 The Hacker</option>
-                <option value="professor">🧠 The Professor</option>
-                <option value="creator">🎨 The Creator</option>
               </select>
 
               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-cyan-400 pointer-events-none">
