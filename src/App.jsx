@@ -3,7 +3,6 @@ import { sendToRuthless } from "./api";
 import logo from "./ruthless-logo.png";
 
 export default function App() {
-  // Personality intro lines
   const modeIntros = {
     ruthless: "Ready. No filters. No feelings. Just raw answers.",
     drlove: "Dr. Love is at your service. Spill it out hoe. ❤️",
@@ -54,7 +53,6 @@ export default function App() {
     setInput("");
     setLoading(true);
 
-    // THINKING DELAY
     setThinking(false);
     const thinkingTimer = setTimeout(() => {
       setThinking(true);
@@ -91,7 +89,6 @@ export default function App() {
         started ? "pt-6" : ""
       }`}
     >
-      {/* BACKGROUND GLOW */}
       {mode !== "hacker" && mode !== "drlove" && (
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
@@ -122,10 +119,15 @@ export default function App() {
           started
             ? "max-w-3xl h-[90vh] flex flex-col justify-between"
             : "max-w-md"
-        } ${mode === "drlove" ? "bg-rose-900/30" : "bg-white/5"} backdrop-blur-md border border-white/10 
-        rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.25)] p-6`}
+        } 
+        ${
+          mode === "drlove"
+            ? "bg-[#2a0c14]/70 shadow-[0_0_30px_rgba(255,0,80,0.25)]"
+            : "bg-white/5"
+        }
+        backdrop-blur-md border border-white/10 
+        rounded-2xl p-6`}
       >
-        {/* HEADER */}
         <div className="flex flex-col items-center justify-center mb-4">
           <h1
             className={`text-2xl font-bold tracking-widest mb-2 ${
@@ -194,7 +196,9 @@ export default function App() {
                 ? `${mode.charAt(0).toUpperCase() + mode.slice(1)}: `
                 : "You: "}
               <span
-                className="text-gray-300"
+                className={`${
+                  mode === "drlove" ? "text-rose-100" : "text-gray-300"
+                }`}
                 dangerouslySetInnerHTML={{ __html: msg.content }}
               ></span>
             </div>
