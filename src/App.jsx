@@ -36,7 +36,6 @@ export default function App() {
     };
   }, []);
 
-  // Update intro when mode changes
   useEffect(() => {
     setMessages([{ role: "ai", content: modeIntros[mode] }]);
   }, [mode]);
@@ -55,7 +54,7 @@ export default function App() {
     setInput("");
     setLoading(true);
 
-    // THINKING DELAY LOGIC
+    // THINKING DELAY
     setThinking(false);
     const thinkingTimer = setTimeout(() => {
       setThinking(true);
@@ -85,14 +84,14 @@ export default function App() {
         mode === "hacker"
           ? "bg-transparent"
           : mode === "drlove"
-          ? "bg-gradient-to-b from-pink-300 via-rose-400 to-pink-500"
+          ? "bg-gradient-to-b from-pink-400 via-rose-500 to-pink-600"
           : "bg-gradient-to-b from-black via-zinc-900 to-black"
       }
       text-white overflow-hidden transition-all duration-700 ${
         started ? "pt-6" : ""
       }`}
     >
-      {/* BACKGROUND GLOW */}
+      {/* GLOW */}
       {mode !== "hacker" && mode !== "drlove" && (
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
@@ -103,7 +102,7 @@ export default function App() {
       {mode === "drlove" && (
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px]
-      bg-pink-400/30 blur-[200px] rounded-full animate-pulse-slow"
+      bg-pink-400/20 blur-[200px] rounded-full animate-pulse-slow"
         ></div>
       )}
 
@@ -123,14 +122,14 @@ export default function App() {
           started
             ? "max-w-3xl h-[90vh] flex flex-col justify-between"
             : "max-w-md"
-        } bg-white/5 backdrop-blur-md border border-white/10 
-        rounded-2xl shadow-[0_0_30px_rgba(0,255,255,0.1)] p-6`}
+        } ${mode === "drlove" ? "bg-rose-900/20" : "bg-white/5"} backdrop-blur-md border border-white/10 
+        rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.25)] p-6`}
       >
         {/* HEADER */}
         <div className="flex flex-col items-center justify-center mb-4">
           <h1
             className={`text-2xl font-bold tracking-widest mb-2 ${
-              mode === "drlove" ? "text-rose-200" : "text-cyan-400"
+              mode === "drlove" ? "text-white" : "text-cyan-400"
             }`}
           >
             RUT#L3SS_AI
@@ -182,7 +181,7 @@ export default function App() {
                   ? mode === "hacker"
                     ? "hacker-ai text-left"
                     : mode === "drlove"
-                    ? "text-pink-200 text-left"
+                    ? "text-rose-200 text-left"
                     : "text-cyan-300 text-left"
                   : mode === "hacker"
                   ? "hacker-user text-right"
@@ -218,7 +217,7 @@ export default function App() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* INPUT BOX */}
+        {/* INPUT */}
         <form
           onSubmit={sendMessage}
           className={`flex items-center border border-white/10 rounded-xl 
