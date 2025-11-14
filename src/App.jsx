@@ -18,6 +18,7 @@ export default function App() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [thinking, setThinking] = useState(false); // ← ADDED
   const [started, setStarted] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -54,7 +55,19 @@ export default function App() {
     setInput("");
     setLoading(true);
 
+    // -------------------------------
+    // THINKING DELAY LOGIC (ADDED)
+    // -------------------------------
+    setThinking(false);
+    const thinkingTimer = setTimeout(() => {
+      setThinking(true);
+    }, 2000);
+    // -------------------------------
+
     const aiReply = await sendToRuthless([...messages, userMessage], mode);
+
+    clearTimeout(thinkingTimer); // ← Stop thinking mode
+    setThinking(false);
 
     const emojiSet = ["😎", "🤖", "💬", "⚡", "✨", "🧠", "🔥", "👀", "😄"];
     const randomEmoji = emojiSet[Math.floor(Math.random() * emojiSet.length)];
@@ -160,13 +173,22 @@ export default function App() {
             </div>
           ))}
 
-          {loading && (
+          {/* THINKING MESSAGE (ADDED) */}
+          {thinking && (
+            <div className="text-cyan-400 text-sm font-mono italic">
+              thinking to give you the best answer...
+            </div>
+          )}
+
+          {/* ORIGINAL LOADING DOTS (unchanged) */}
+          {loading && !thinking && (
             <div className="flex space-x-1 justify-start text-cyan-400 text-sm font-mono">
               <span className="animate-bounce">•</span>
               <span className="animate-bounce delay-150">•</span>
               <span className="animate-bounce delay-300">•</span>
             </div>
           )}
+
           <div ref={messagesEndRef} />
         </div>
 

@@ -2,7 +2,7 @@ const PROXY_URL = "https://ruthless-proxyy.onrender.com"; // your working proxy
 
 // 🧠 Personalities mapped to their model names
 const MODES = {
-  ruthless: "ruthless-qwen",   // ← THE ONE YOU JUST CREATED
+  ruthless: "ruthless-wizard",   // ← THE ONE YOU JUST CREATED
   drlove: "drlove-uncensored",       // ← YOU ALSO CREATED THIS
   hacker: "hacker-wizard"            // ← Your hacker model
 };
