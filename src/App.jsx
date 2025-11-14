@@ -84,14 +84,14 @@ export default function App() {
         mode === "hacker"
           ? "bg-transparent"
           : mode === "drlove"
-          ? "bg-gradient-to-b from-pink-400 via-rose-500 to-pink-600"
+          ? "bg-gradient-to-b from-rose-600 via-rose-500 to-pink-500"
           : "bg-gradient-to-b from-black via-zinc-900 to-black"
       }
       text-white overflow-hidden transition-all duration-700 ${
         started ? "pt-6" : ""
       }`}
     >
-      {/* GLOW */}
+      {/* BACKGROUND GLOW */}
       {mode !== "hacker" && mode !== "drlove" && (
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] 
@@ -122,7 +122,7 @@ export default function App() {
           started
             ? "max-w-3xl h-[90vh] flex flex-col justify-between"
             : "max-w-md"
-        } ${mode === "drlove" ? "bg-rose-900/20" : "bg-white/5"} backdrop-blur-md border border-white/10 
+        } ${mode === "drlove" ? "bg-rose-900/30" : "bg-white/5"} backdrop-blur-md border border-white/10 
         rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.25)] p-6`}
       >
         {/* HEADER */}
