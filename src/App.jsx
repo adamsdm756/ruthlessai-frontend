@@ -18,7 +18,7 @@ export default function App() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [thinking, setThinking] = useState(false); // ← ADDED
+  const [thinking, setThinking] = useState(false);
   const [started, setStarted] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -128,13 +128,11 @@ export default function App() {
       >
         {/* HEADER */}
         <div className="flex flex-col items-center justify-center mb-4">
-          <h1 className="text-2xl font-bold tracking-widest mb-2
-            ${
-              mode === "drlove"
-                ? "text-rose-200"
-                : "text-cyan-400"
-            }
-          ">
+          <h1
+            className={`text-2xl font-bold tracking-widest mb-2 ${
+              mode === "drlove" ? "text-rose-200" : "text-cyan-400"
+            }`}
+          >
             RUT#L3SS_AI
           </h1>
 
