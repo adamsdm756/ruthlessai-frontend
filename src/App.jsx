@@ -98,7 +98,7 @@ export default function App() {
 
       {mode === "drlove" && (
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px]
+          className="absolute -top-20 left-1/2 -translate-x-1/2 w-[700px] h-[700px]
       bg-pink-400/20 blur-[200px] rounded-full animate-pulse-slow"
         ></div>
       )}
@@ -226,7 +226,9 @@ export default function App() {
           onSubmit={sendMessage}
           className={`flex items-center border border-white/10 rounded-xl 
           overflow-hidden focus-within:ring-2 transition
-          ${mode === "hacker" ? "hacker-input focus-within:ring-green-400" : ""}`}
+          ${
+            mode === "hacker" ? "hacker-input focus-within:ring-green-400" : ""
+          }`}
         >
           <input
             type="text"
@@ -245,7 +247,7 @@ export default function App() {
             ${
               mode === "hacker"
                 ? "hacker-send-btn"
-              : mode === "drlove"
+                : mode === "drlove"
                 ? "bg-rose-500 hover:bg-rose-400 active:bg-rose-600"
                 : "bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700"
             }`}
