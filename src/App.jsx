@@ -26,7 +26,7 @@ export default function App() {
 
     hacker: (
       <span className="font-mono text-green-400 drop-shadow-[0_0_12px_rgba(0,255,0,0.7)] tracking-widest">
-        [ THE_HACKER]
+        [THE_HACKER]
       </span>
     ),
   };
