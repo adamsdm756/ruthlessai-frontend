@@ -11,6 +11,26 @@ export default function App() {
     creator: "Imagination engaged. Let’s build something legendary. ⚡",
   };
 
+  const modeHeaders = {
+    ruthless: (
+      <span className="drop-shadow-[0_0_12px_rgba(0,255,255,0.7)]">
+        RUTHLESS<span className="text-red-500">AI</span>
+      </span>
+    ),
+
+    drlove: (
+      <span className="drop-shadow-[0_0_14px_rgba(255,120,160,0.8)] text-pink-200">
+        DR<span className="text-pink-400">_LOVE</span>
+      </span>
+    ),
+
+    hacker: (
+      <span className="font-mono text-green-400 drop-shadow-[0_0_12px_rgba(0,255,0,0.7)] tracking-widest">
+        [ RUTHLESS_AI ]
+      </span>
+    ),
+  };
+
   const [mode, setMode] = useState("ruthless");
   const [messages, setMessages] = useState([
     { role: "ai", content: modeIntros["ruthless"] },
@@ -129,12 +149,10 @@ export default function App() {
         rounded-2xl p-6`}
       >
         <div className="flex flex-col items-center justify-center mb-4">
-          <h1
-            className={`text-2xl font-bold tracking-widest mb-2 ${
-              mode === "drlove" ? "text-white" : "text-cyan-400"
-            }`}
-          >
-            RUT#L3SS_AI
+
+          {/* NEW HEADER SYSTEM */}
+          <h1 className="text-4xl font-extrabold tracking-widest mb-2 text-center">
+            {modeHeaders[mode]}
           </h1>
 
           <div className="flex items-center space-x-2">
