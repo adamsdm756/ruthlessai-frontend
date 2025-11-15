@@ -26,7 +26,7 @@ export default function App() {
 
     hacker: (
       <span className="font-mono text-green-400 drop-shadow-[0_0_12px_rgba(0,255,0,0.7)] tracking-widest">
-        [ RUTHLESS_AI ]
+        [ THE_HACKER]
       </span>
     ),
   };
