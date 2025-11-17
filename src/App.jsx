@@ -85,11 +85,17 @@ export default function App() {
 
     const emojiSet = ["😎", "🤖", "💬", "⚡", "✨", "🧠", "🔥", "👀", "😄"];
     const randomEmoji = emojiSet[Math.floor(Math.random() * emojiSet.length)];
-    const formatted =
-      aiReply
-        .replace(/\n{2,}/g, "<br><br>")
-        .replace(/\n/g, "<br>")
-        .replace(/([.!?])\s+/g, "$1&nbsp;&nbsp;") + ` ${randomEmoji}`;
+
+    // =============================================
+    // REPLACED FORMATTER (CODE BLOCK SUPPORT ADDED)
+    // =============================================
+    const formatted = aiReply
+      .replace(/```([\s\S]*?)```/g, (match, code) => {
+        return `<pre><code>${code.replace(/</g, "&lt;")}</code></pre>`;
+      })
+      .replace(/\n/g, "<br>") +
+      ` ${randomEmoji}`;
+    // =============================================
 
     setMessages((prev) => [...prev, { role: "ai", content: formatted }]);
     setLoading(false);
@@ -150,7 +156,6 @@ export default function App() {
       >
         <div className="flex flex-col items-center justify-center mb-4">
 
-          {/* NEW HEADER SYSTEM */}
           <h1 className="text-4xl font-extrabold tracking-widest mb-2 text-center">
             {modeHeaders[mode]}
           </h1>
@@ -191,7 +196,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* MESSAGES */}
         <div className="flex-1 space-y-6 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-gray-600">
           {messages.map((msg, i) => (
             <div
@@ -239,7 +243,6 @@ export default function App() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* INPUT */}
         <form
           onSubmit={sendMessage}
           className={`flex items-center border border-white/10 rounded-xl 

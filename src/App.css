@@ -103,6 +103,7 @@ button:hover {
   0%, 100% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.05); }
   50% { box-shadow: 0 0 35px rgba(0, 255, 255, 0.15); }
 }
+
 .animate-ambientPulse {
   animation: ambientPulse 6s ease-in-out infinite;
 }
@@ -144,6 +145,7 @@ button:hover {
   background: #00ff88 !important;
   color: black !important;
 }
+
 .hacker-send-btn:hover {
   background: #33ffaa !important;
 }
@@ -151,4 +153,23 @@ button:hover {
 #root {
   position: relative;
   z-index: 1;
+}
+
+
+pre, pre code {
+  background: #000 !important;
+  color: #00ff88 !important;
+  padding: 14px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-family: "Fira Code", monospace;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  border: 1px solid #00ff8855;
+  box-shadow: 0 0 15px rgba(0, 255, 100, 0.3);
+}
+
+code {
+  color: #00ff88 !important;
+  font-family: "Fira Code", monospace;
 }
